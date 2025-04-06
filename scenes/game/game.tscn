@@ -109,7 +109,7 @@ shape = SubResource("SegmentShape2D_87uf6")
 
 [node name="Player" parent="." instance=ExtResource("5_ktwa8")]
 unique_name_in_owner = true
-position = Vector2(100.204, 194.178)
+position = Vector2(122.581, 190.621)
 stats = ExtResource("6_157ky")
 
 [node name="Camera" type="Camera2D" parent="Player"]
@@ -118,7 +118,6 @@ limit_left = 0
 limit_top = 0
 limit_right = 640
 script = ExtResource("8_2a8rs")
-random_strength = 10.0
 shake_fade = 10.0
 
 [node name="PathLeft" type="Path2D" parent="Player"]

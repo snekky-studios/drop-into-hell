@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://c0t8wetvbrehp"]
+[gd_scene load_steps=10 format=3 uid="uid://c0t8wetvbrehp"]
 
 [ext_resource type="Script" uid="uid://b3qrijg362ljb" path="res://scenes/enemy/enemy.gd" id="1_4a83h"]
 [ext_resource type="Texture2D" uid="uid://ddcwnovvxt1kp" path="res://assets/sprites/devil1.png" id="2_a3pup"]
+[ext_resource type="Texture2D" uid="uid://sw6bl8vwrmhn" path="res://assets/sprites/particle_devil_death.png" id="3_40wdo"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a3pup"]
 radius = 11.0
@@ -13,6 +14,20 @@ bg_color = Color(1, 0, 0, 0.501961)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_40wdo"]
 bg_color = Color(0, 1, 0, 0.501961)
 
+[sub_resource type="Curve" id="Curve_40wdo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_40wdo"]
+curve = SubResource("Curve_40wdo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a3pup"]
+particle_flag_disable_z = true
+radial_velocity_min = -500.0
+radial_velocity_max = 500.0
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_40wdo")
+
 [node name="Enemy" type="Area2D" groups=["enemy", "entity"]]
 collision_layer = 8
 collision_mask = 4
@@ -22,6 +37,7 @@ script = ExtResource("1_4a83h")
 shape = SubResource("CapsuleShape2D_a3pup")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+unique_name_in_owner = true
 texture = ExtResource("2_a3pup")
 
 [node name="TimerShoot" type="Timer" parent="."]
@@ -39,5 +55,15 @@ theme_override_styles/background = SubResource("StyleBoxFlat_a3pup")
 theme_override_styles/fill = SubResource("StyleBoxFlat_40wdo")
 value = 50.0
 show_percentage = false
+
+[node name="Particles" type="GPUParticles2D" parent="."]
+unique_name_in_owner = true
+emitting = false
+amount = 300
+texture = ExtResource("3_40wdo")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_a3pup")
 
 [connection signal="timeout" from="TimerShoot" to="." method="_on_timer_shoot_timeout"]

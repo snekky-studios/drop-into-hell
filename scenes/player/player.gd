@@ -9,8 +9,8 @@ enum Side {
 	LEFT
 }
 
-const SPEED : int = 300.0
-const JUMP_VELOCITY : int = -400.0
+const SPEED : float = 300.0
+const JUMP_VELOCITY : float = -400.0
 const MAX_VELOCITY : int = 600
 const MAX_JUMPS : int = 2
 
@@ -128,13 +128,10 @@ func _on_timer_cooldown_swing_timeout() -> void:
 	on_cooldown_swing = false
 	return
 
-
 func _on_timer_cooldown_block_timeout() -> void:
 	on_cooldown_block = false
 	return
 
-
 func _on_timer_cooldown_jump_timeout() -> void:
-	print("jumps reset")
 	num_jumps = 0
 	return

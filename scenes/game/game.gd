@@ -6,16 +6,20 @@ enum Side {
 	RIGHT
 }
 
+const VERSION : String = "v1.0.1"
+
 const LEVEL : PackedScene = preload("res://scenes/level/level.tscn")
 const DEVIL : PackedScene = preload("res://scenes/enemy/enemy.tscn")
 const SATAN : PackedScene = preload("res://scenes/satan/satan.tscn")
+const BULLET : PackedScene = preload("res://scenes/bullet/bullet.tscn")
+
 const STATS_ENEMY : Resource = preload("res://data/entity/devil_stats.tres")
 const STATS_SATAN : Resource = preload("res://data/entity/satan_stats.tres")
 
-const DEVIL_KILL_COUNT_MAX : int = 5
+const DEVIL_KILL_COUNT_MAX : int = 6
 const DEVIL_SPAWN_TIME : float = 5.0
 const SPAWNING_DEVILS_THRESHOLD : int = 1000
-const LEVEL_OFFSET : int = 1200
+const LEVEL_OFFSET : int = 1800
 const SATAN_HEIGHT : int = 64
 
 var player : Player = null
@@ -52,17 +56,31 @@ func _ready() -> void:
 	label_into = %LabelInto
 	label_hell = %LabelHell
 	
+	player.set_physics_process(false)
 	player.dead.connect(_on_player_dead)
 	player.was_hit.connect(camera.apply_shake)
-	camera.random_strength = 10.0
 	camera.shake_fade = 10.0
 	
-	player.set_physics_process(false)
+	# prevents lag spike when particles first emit
+	var devil_temp : Area2D = DEVIL.instantiate()
+	devil_temp.stats = STATS_ENEMY.duplicate()
+	devil_temp.player = player
+	devil_temp.position = Vector2(-1000, -1000)
+	add_child(devil_temp)
+	devil_temp.stats.hitpoints = 0
+	var bullet_temp : Area2D = BULLET.instantiate()
+	bullet_temp.position = Vector2(-1000, -1000)
+	add_child(bullet_temp)
+	bullet_temp.set_particles_initial_velocity(10.0)
+	await get_tree().create_timer(1.0).timeout
+	bullet_temp.queue_free()
+	
+	
 	await title_animation()
 	player.set_physics_process(true)
 	return
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	path_follow_left.global_position.x = -32
 	path_follow_right.global_position.x = 672
 	if(not is_spawning_devils):
@@ -102,6 +120,7 @@ func spawn_satan() -> void:
 
 func fade_to_white(value : float):
 	color_rect_white.modulate.a = value
+	camera.apply_shake(lerpf(0.0, 10.0, value))
 	return
 
 func fade_to_black(value : float):
@@ -113,6 +132,7 @@ func num_enemies() -> int:
 
 func _on_devil_dead() -> void:
 	devil_kill_count += 1
+	camera.apply_shake()
 	if(devil_kill_count >= DEVIL_KILL_COUNT_MAX):
 		devil_kill_count = -1000
 		timer_devil_spawner.stop()
@@ -121,6 +141,8 @@ func _on_devil_dead() -> void:
 	return
 
 func _on_satan_dead() -> void:
+	player.progress_bar_hitpoints.hide()
+	camera.apply_shake()
 	level.dissolve()
 	await get_tree().create_timer(2.0).timeout
 	var tween : Tween = get_tree().create_tween()
@@ -130,6 +152,7 @@ func _on_satan_dead() -> void:
 	return
 
 func _on_player_dead() -> void:
+	player.progress_bar_hitpoints.hide()
 	await get_tree().create_timer(1.0).timeout
 	var tween : Tween = get_tree().create_tween()
 	await tween.tween_method(fade_to_black, 0.0, 1.0, 5.0).finished
@@ -137,9 +160,11 @@ func _on_player_dead() -> void:
 	get_tree().reload_current_scene()
 	return
 
+# debug only
 func _unhandled_input(event: InputEvent) -> void:
 	if(event.is_action_pressed("skip")):
-		_on_satan_dead()
+		#_on_satan_dead()
+		pass
 	return
 
 func _on_timer_devil_spawner_timeout() -> void:
