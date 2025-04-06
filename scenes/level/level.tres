@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://wfx8qk3e4a1e"]
+
+[ext_resource type="Shader" uid="uid://b26bhrdrp1grc" path="res://scenes/level/level.gdshader" id="1_i7087"]
+
+[sub_resource type="Gradient" id="Gradient_i166f"]
+colors = PackedColorArray(1, 0, 0, 0, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qkmgm"]
+gradient = SubResource("Gradient_i166f")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_i7087"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hnne4"]
+noise = SubResource("FastNoiseLite_i7087")
+
+[resource]
+shader = ExtResource("1_i7087")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_hnne4")
+shader_parameter/burn_texture = SubResource("GradientTexture1D_qkmgm")
+shader_parameter/integrity = 1.0
+shader_parameter/burn_size = 1.5

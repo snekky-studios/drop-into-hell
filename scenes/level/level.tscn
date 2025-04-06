@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=4 uid="uid://c3ek5gck8ys1w"]
+
+[ext_resource type="Texture2D" uid="uid://ll4tn6vwbadq" path="res://assets/sprites/platform2.png" id="1_h3e3j"]
+[ext_resource type="Material" uid="uid://wfx8qk3e4a1e" path="res://scenes/level/level.tres" id="1_i166f"]
+[ext_resource type="Script" uid="uid://foux2em55ges" path="res://scenes/level/level.gd" id="1_nbgty"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_6q06x"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hujxm"]
+texture = ExtResource("1_h3e3j")
+texture_region_size = Vector2i(32, 16)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_yyfjg"]
+tile_size = Vector2i(32, 16)
+sources/0 = SubResource("TileSetAtlasSource_hujxm")
+
+[node name="StaticBody2DLevel" type="StaticBody2D"]
+collision_mask = 15
+script = ExtResource("1_nbgty")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("WorldBoundaryShape2D_6q06x")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+unique_name_in_owner = true
+material = ExtResource("1_i166f")
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAASAAAAAAAAAAAAAAABAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAALAAAAAAAAAAAAAAANAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAARAAAAAAAAAAAAAAATAAAAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_yyfjg")
+collision_enabled = false
+navigation_enabled = false

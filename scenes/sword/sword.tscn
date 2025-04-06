@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bcedcuvueyg1v"]
+
+[ext_resource type="Script" uid="uid://cpn5a0uqqk1ug" path="res://scenes/sword/sword.gd" id="1_foc86"]
+[ext_resource type="Texture2D" uid="uid://cm8n0lspragfv" path="res://assets/sprites/sword.png" id="2_u815k"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lvxji"]
+radius = 4.0
+
+[node name="Sword" type="Area2D"]
+collision_layer = 4
+collision_mask = 8
+script = ExtResource("1_foc86")
+
+[node name="SpriteSword" type="Sprite2D" parent="."]
+position = Vector2(18, 8)
+texture = ExtResource("2_u815k")
+
+[node name="CollisionShapeSword" type="CollisionShape2D" parent="."]
+position = Vector2(22, 7)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_lvxji")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

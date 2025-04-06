@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://c0t8wetvbrehp"]
+
+[ext_resource type="Script" uid="uid://b3qrijg362ljb" path="res://scenes/enemy/enemy.gd" id="1_4a83h"]
+[ext_resource type="Texture2D" uid="uid://ddcwnovvxt1kp" path="res://assets/sprites/devil1.png" id="2_a3pup"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a3pup"]
+radius = 11.0
+height = 32.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a3pup"]
+bg_color = Color(1, 0, 0, 0.501961)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_40wdo"]
+bg_color = Color(0, 1, 0, 0.501961)
+
+[node name="Enemy" type="Area2D" groups=["enemy", "entity"]]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("1_4a83h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_a3pup")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_a3pup")
+
+[node name="TimerShoot" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 5.0
+autostart = true
+
+[node name="ProgressBarHitpoints" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+offset_left = -16.0
+offset_top = -22.0
+offset_right = 16.0
+offset_bottom = -18.0
+theme_override_styles/background = SubResource("StyleBoxFlat_a3pup")
+theme_override_styles/fill = SubResource("StyleBoxFlat_40wdo")
+value = 50.0
+show_percentage = false
+
+[connection signal="timeout" from="TimerShoot" to="." method="_on_timer_shoot_timeout"]

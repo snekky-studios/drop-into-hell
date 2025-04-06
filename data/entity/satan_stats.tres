@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EntityStats" load_steps=2 format=3 uid="uid://bnpjrxqdtgum4"]
+
+[ext_resource type="Script" uid="uid://co4kg6182ugbc" path="res://data/entity/entity_stats.gd" id="1_1t8g3"]
+
+[resource]
+script = ExtResource("1_1t8g3")
+hitpoints = 400
+attack = 10
+metadata/_custom_type_script = "uid://co4kg6182ugbc"

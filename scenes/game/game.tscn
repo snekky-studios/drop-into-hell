@@ -1,0 +1,205 @@
+[gd_scene load_steps=18 format=3 uid="uid://bsr33oju17w2d"]
+
+[ext_resource type="Script" uid="uid://btn4dq3taaqkk" path="res://scenes/game/game.gd" id="1_em1bs"]
+[ext_resource type="Texture2D" uid="uid://df0ltgewig45a" path="res://assets/sprites/background1.png" id="2_0rn35"]
+[ext_resource type="Texture2D" uid="uid://dfmvxdan2b7xx" path="res://assets/sprites/start2.png" id="2_bdhmt"]
+[ext_resource type="Texture2D" uid="uid://bn4pk8hetdoij" path="res://assets/sprites/midground1.png" id="3_kjrfb"]
+[ext_resource type="Texture2D" uid="uid://cdjgbepbi2bjt" path="res://assets/sprites/foreground1.png" id="4_se30j"]
+[ext_resource type="PackedScene" uid="uid://bonjungj3rv4y" path="res://scenes/player/player.tscn" id="5_ktwa8"]
+[ext_resource type="Resource" uid="uid://bx060sebqn2cn" path="res://data/entity/player_stats.tres" id="6_157ky"]
+[ext_resource type="Script" uid="uid://csmiefugfchsb" path="res://scenes/game/camera.gd" id="8_2a8rs"]
+[ext_resource type="FontFile" uid="uid://chuosahxohhi1" path="res://assets/fonts/TacOne-Regular.ttf" id="8_87uf6"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_6q06x"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ow5a4"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bdhmt"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_bdhmt"]
+a = Vector2(0, 210)
+b = Vector2(200, 216)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_87uf6"]
+a = Vector2(60, 30)
+b = Vector2(-140, 40)
+
+[sub_resource type="Curve2D" id="Curve2D_yyfjg"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -32, 0, 0, 0, 0, 0, -32, 360)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_b1x3f"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 672, 0, 0, 0, 0, 0, 672, 360)
+}
+point_count = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_2a8rs"]
+font = ExtResource("8_87uf6")
+font_size = 80
+font_color = Color(0, 0, 0, 1)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_em1bs")
+
+[node name="Background" type="CanvasGroup" parent="."]
+
+[node name="Parallax2DBackground" type="Parallax2D" parent="Background"]
+scroll_scale = Vector2(0.1, 0.1)
+repeat_size = Vector2(0, 360)
+
+[node name="SpriteBackground" type="Sprite2D" parent="Background/Parallax2DBackground"]
+position = Vector2(320, 180)
+texture = ExtResource("2_0rn35")
+
+[node name="Parallax2DMidground" type="Parallax2D" parent="Background"]
+scroll_scale = Vector2(0.4, 0.4)
+repeat_size = Vector2(0, 360)
+
+[node name="SpriteMidground" type="Sprite2D" parent="Background/Parallax2DMidground"]
+position = Vector2(320, 180)
+texture = ExtResource("3_kjrfb")
+
+[node name="Parallax2DForeground" type="Parallax2D" parent="Background"]
+scroll_scale = Vector2(0.8, 0.8)
+repeat_size = Vector2(0, 360)
+
+[node name="SpriteForeground" type="Sprite2D" parent="Background/Parallax2DForeground"]
+position = Vector2(320, 180)
+texture = ExtResource("4_se30j")
+
+[node name="Parallax2DEdge" type="Parallax2D" parent="Background"]
+
+[node name="StaticBody2DLeft" type="StaticBody2D" parent="Background/Parallax2DEdge"]
+position = Vector2(16, 0)
+collision_mask = 15
+physics_material_override = SubResource("PhysicsMaterial_6q06x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Parallax2DEdge/StaticBody2DLeft"]
+rotation = 1.5708
+shape = SubResource("WorldBoundaryShape2D_ow5a4")
+
+[node name="StaticBody2DRight" type="StaticBody2D" parent="Background/Parallax2DEdge"]
+position = Vector2(624, 0)
+collision_mask = 15
+physics_material_override = SubResource("PhysicsMaterial_6q06x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Parallax2DEdge/StaticBody2DRight"]
+rotation = -1.5708
+shape = SubResource("WorldBoundaryShape2D_ow5a4")
+
+[node name="Parallax2DStart" type="Parallax2D" parent="Background"]
+
+[node name="SpriteStart" type="Sprite2D" parent="Background/Parallax2DStart"]
+position = Vector2(320, 140)
+texture = ExtResource("2_bdhmt")
+
+[node name="Area2D" type="StaticBody2D" parent="Background/Parallax2DStart"]
+collision_mask = 21
+physics_material_override = SubResource("PhysicsMaterial_bdhmt")
+
+[node name="CollisionShapeGroundLeft" type="CollisionShape2D" parent="Background/Parallax2DStart/Area2D"]
+shape = SubResource("SegmentShape2D_bdhmt")
+
+[node name="CollisionShapeGroundRight" type="CollisionShape2D" parent="Background/Parallax2DStart/Area2D"]
+position = Vector2(578.294, 179.409)
+shape = SubResource("SegmentShape2D_87uf6")
+
+[node name="Player" parent="." instance=ExtResource("5_ktwa8")]
+unique_name_in_owner = true
+position = Vector2(100.204, 194.178)
+stats = ExtResource("6_157ky")
+
+[node name="Camera" type="Camera2D" parent="Player"]
+unique_name_in_owner = true
+limit_left = 0
+limit_top = 0
+limit_right = 640
+script = ExtResource("8_2a8rs")
+random_strength = 10.0
+shake_fade = 10.0
+
+[node name="PathLeft" type="Path2D" parent="Player"]
+unique_name_in_owner = true
+position = Vector2(-320, -180)
+curve = SubResource("Curve2D_yyfjg")
+
+[node name="PathFollowLeft" type="PathFollow2D" parent="Player/PathLeft"]
+unique_name_in_owner = true
+position = Vector2(-32, 0)
+rotation = 1.5708
+
+[node name="PathRight" type="Path2D" parent="Player"]
+unique_name_in_owner = true
+position = Vector2(-320, -180)
+curve = SubResource("Curve2D_b1x3f")
+
+[node name="PathFollowRight" type="PathFollow2D" parent="Player/PathRight"]
+unique_name_in_owner = true
+position = Vector2(672, 0)
+rotation = 1.5708
+
+[node name="TimerDevilSpawner" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 5.0
+
+[node name="CanvasLayerFade" type="CanvasLayer" parent="."]
+
+[node name="ColorRectWhite" type="ColorRect" parent="CanvasLayerFade"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRectBlack" type="ColorRect" parent="CanvasLayerFade"]
+unique_name_in_owner = true
+modulate = Color(0, 0, 0, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CanvasLayerMenu" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="LabelDrop" type="Label" parent="CanvasLayerMenu"]
+unique_name_in_owner = true
+visible = false
+offset_left = 23.3617
+offset_top = 42.7785
+offset_right = 475.362
+offset_bottom = 125.778
+text = "DROP"
+label_settings = SubResource("LabelSettings_2a8rs")
+
+[node name="LabelInto" type="Label" parent="CanvasLayerMenu"]
+unique_name_in_owner = true
+visible = false
+offset_left = 254.965
+offset_top = 44.0203
+offset_right = 706.965
+offset_bottom = 127.02
+text = "INTO"
+label_settings = SubResource("LabelSettings_2a8rs")
+
+[node name="LabelHell" type="Label" parent="CanvasLayerMenu"]
+unique_name_in_owner = true
+visible = false
+offset_left = 477.255
+offset_top = 44.0203
+offset_right = 929.255
+offset_bottom = 127.02
+size_flags_horizontal = 4
+text = "HELL"
+label_settings = SubResource("LabelSettings_2a8rs")
+
+[connection signal="timeout" from="TimerDevilSpawner" to="." method="_on_timer_devil_spawner_timeout"]
