@@ -3,3 +3,4 @@
 /android/
 .editorconfig
 *.tmp
+*.aseprite
